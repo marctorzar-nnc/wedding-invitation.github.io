@@ -44,109 +44,57 @@ document.addEventListener("DOMContentLoaded", function () {
     mapLink.setAttribute("aria-label", venueIsKnown ? "Open venue in Google Maps" : "Open the general area in Google Maps");
   }
 
-  // Soft original wedding ambience with melody, warm bass, and gentle chord harmony.
-  // Attempt autoplay on page load; browsers may require one tap before allowing sound.
+  // Wedding background music from the MP3 stored in the repository.
+  // Autoplay is attempted, but browsers may require a guest to tap the music button.
   const musicToggle = document.getElementById("music-toggle");
   if (musicToggle) {
-    let audioContext = null;
-    let musicTimer = null;
-    let musicStep = 0;
+    const backgroundMusic = new Audio("assets/music/Merry-Go-Round-of-Life.mp3");
+    backgroundMusic.loop = true;
+    backgroundMusic.preload = "auto";
+    backgroundMusic.volume = 0.65;
     let musicPlaying = false;
-    const melody = [523.25,659.25,783.99,659.25,587.33,659.25,523.25,392.00,440.00,523.25,659.25,523.25,493.88,587.33,659.25,493.88];
-    const chords = [
-      [261.63,329.63,392.00], // C major
-      [220.00,261.63,329.63], // A minor
-      [174.61,220.00,261.63], // F major
-      [196.00,246.94,293.66]  // G major
-    ];
-    const bassNotes = [130.81,110.00,87.31,98.00];
+    const musicLabel = musicToggle.querySelector(".music-toggle-label");
 
-    function playTone(frequency, startAt, duration, volume, wave, attack) {
-      const oscillator = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      oscillator.type = wave || "sine";
-      oscillator.frequency.setValueAtTime(frequency, startAt);
-      gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(volume, startAt + (attack || 0.09));
-      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
-      oscillator.connect(gain);
-      gain.connect(audioContext.destination);
-      oscillator.start(startAt);
-      oscillator.stop(startAt + duration + 0.04);
-    }
-
-    function playHarmony(now) {
-      const chordIndex = Math.floor(musicStep / 4) % chords.length;
-      const chord = chords[chordIndex];
-      // Sustained, quiet chord tones underneath the melody.
-      chord.forEach(function (frequency, index) {
-        playTone(frequency, now, 2.2, 0.014 - index * 0.002, "sine", 0.22);
-      });
-      // Gentle low bass note adds warmth without overpowering the melody.
-      playTone(bassNotes[chordIndex], now, 1.65, 0.035, "triangle", 0.16);
-      // A light broken-chord sparkle, like soft piano notes.
-      playTone(chord[(musicStep / 2) % chord.length | 0], now + 0.31, 0.7, 0.018, "sine", 0.05);
-      playTone(chord[(Math.floor(musicStep / 2) + 1) % chord.length], now + 0.62, 0.7, 0.015, "sine", 0.05);
-    }
-
-    function playMusicStep() {
-      if (!musicPlaying || !audioContext) return;
-      const now = audioContext.currentTime;
-      const note = melody[musicStep % melody.length];
-      playTone(note, now, 1.0, 0.065, "sine", 0.08);
-      playTone(note * 2, now + 0.02, 0.48, 0.009, "triangle", 0.05);
-      if (musicStep % 4 === 0) playHarmony(now);
-      musicStep = (musicStep + 1) % melody.length;
+    function updateMusicControl(playing, label) {
+      musicPlaying = playing;
+      musicToggle.setAttribute("aria-pressed", playing ? "true" : "false");
+      musicToggle.setAttribute("aria-label", playing ? "Pause wedding background music" : "Play wedding background music");
+      if (musicLabel) musicLabel.textContent = label || (playing ? "Pause music" : "Play music");
     }
 
     async function startMusic() {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) {
-        musicToggle.querySelector(".music-toggle-label").textContent = "Audio unavailable";
+      try {
+        await backgroundMusic.play();
+        updateMusicControl(true, "Pause music");
+        return true;
+      } catch (error) {
+        updateMusicControl(false, "Tap for music");
         return false;
       }
-      if (!audioContext) audioContext = new AudioContextClass();
-      if (audioContext.state === "suspended") await audioContext.resume();
-      if (audioContext.state !== "running") return false;
-      if (musicTimer) window.clearInterval(musicTimer);
-      musicPlaying = true;
-      musicToggle.setAttribute("aria-pressed", "true");
-      musicToggle.setAttribute("aria-label", "Pause wedding background music");
-      musicToggle.querySelector(".music-toggle-label").textContent = "Pause music";
-      playMusicStep();
-      musicTimer = window.setInterval(playMusicStep, 620);
-      return true;
     }
 
-    async function stopMusic() {
-      musicPlaying = false;
-      if (musicTimer) window.clearInterval(musicTimer);
-      musicTimer = null;
-      if (audioContext && audioContext.state === "running") await audioContext.suspend();
-      musicToggle.setAttribute("aria-pressed", "false");
-      musicToggle.setAttribute("aria-label", "Play wedding background music");
-      musicToggle.querySelector(".music-toggle-label").textContent = "Play music";
+    function stopMusic() {
+      backgroundMusic.pause();
+      updateMusicControl(false, "Play music");
     }
 
     musicToggle.addEventListener("click", function () {
-      if (musicPlaying) stopMusic();
-      else startMusic().then(function (started) {
-        if (!started) musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
-      }).catch(function () {
-        musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
-      });
+      if (musicPlaying && !backgroundMusic.paused) {
+        stopMusic();
+      } else {
+        startMusic();
+      }
     });
 
-    // Browsers that permit autoplay start immediately; otherwise leave a one-tap fallback.
-    startMusic().then(function (started) {
-      if (!started) musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
-    }).catch(function () {
-      musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
+    backgroundMusic.addEventListener("error", function () {
+      updateMusicControl(false, "Music unavailable");
     });
+
+    // Try autoplay; if blocked, the existing button remains the fallback.
+    startMusic();
 
     window.addEventListener("pagehide", function () {
-      if (musicTimer) window.clearInterval(musicTimer);
-      if (audioContext && audioContext.state !== "closed") audioContext.close();
+      backgroundMusic.pause();
     });
   }
 
