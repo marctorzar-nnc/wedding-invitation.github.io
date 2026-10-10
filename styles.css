@@ -46,3 +46,6 @@
 .form-message.is-decline .confirmation-icon{background:#f4dfd9;color:#a85f51}
 .form-message strong{display:block;font-family:var(--serif);font-size:24px;font-weight:500;line-height:1.2}
 .form-message p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
+
+/* Respectful RSVP note for the intimate civil wedding. */
+.guest-policy-note{margin:0 0 22px;padding:16px 17px;background:#f8f1eb;border-left:2px solid var(--rose);color:var(--muted)}.guest-policy-note .policy-note-heading{display:block;margin:0 0 5px;color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.3}.guest-policy-note p{margin:0;font-size:11px;line-height:1.75}
