@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=7">
 <script src="script.js?v=5" defer></script>
 </head>
 <body>
@@ -65,7 +65,7 @@
 <input class="website-field" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field empty"><label for="guest-name">Your full name <span>*</span></label><input id="guest-name" name="name" type="text" placeholder="Enter your name" autocomplete="name" required>
 <label for="guest-email">Email address <span class="optional">(optional)</span></label><input id="guest-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
 <fieldset><legend>Will you be attending? <span>*</span></legend><label class="radio-card"><input type="radio" name="attendance" value="Joyfully accepts" required><span>Joyfully accepts</span></label><label class="radio-card"><input type="radio" name="attendance" value="Regretfully declines"><span>Regretfully declines</span></label></fieldset>
-<label for="guest-notes">Dietary needs or a note <span class="optional">(optional)</span></label><textarea id="guest-notes" name="notes" rows="3" placeholder="Anything we should know?"></textarea>
+<div class="guest-policy-note" role="note"><span class="policy-note-heading">A gentle note about our celebration</span><p>As this is an intimate civil wedding with limited seating, we’re only able to accommodate the guest named on this invitation. We kindly ask that you attend without a plus-one. Thank you so much for understanding and respecting our arrangements.</p></div>
 <button class="primary-button submit-button" type="submit">Send RSVP <span aria-hidden="true">↗</span></button><p class="form-note">Your response helps us plan our day. Please submit one RSVP per guest.</p><div class="form-message" id="form-message" role="status" aria-live="polite" hidden></div>
 </form></div>
 <footer class="site-footer"><a class="brand footer-brand monogram" href="#home">M &amp; A</a><p>Thank you for being part of our story.</p><span class="footer-hashtag" id="event-hashtag">#OurDayOnThe28th</span></footer>
