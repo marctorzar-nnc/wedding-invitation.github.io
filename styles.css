@@ -49,3 +49,6 @@
 
 /* Respectful RSVP note for the intimate civil wedding. */
 .guest-policy-note{margin:0 0 22px;padding:16px 17px;background:#f8f1eb;border-left:2px solid var(--rose);color:var(--muted)}.guest-policy-note .policy-note-heading{display:block;margin:0 0 5px;color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.3}.guest-policy-note p{margin:0;font-size:11px;line-height:1.75}
+
+/* Private-album QR shown only in the accepted-RSVP confirmation state. */
+.acceptance-confirmation{flex:1;min-width:0}.album-qr-panel{margin-top:18px;padding:18px;background:#fffdfa;border:1px solid var(--line);text-align:center}.album-qr-heading{display:block;font-family:var(--serif);font-size:20px;color:var(--ink)}.album-qr-panel p{max-width:390px;margin:7px auto 14px;font-size:11px;line-height:1.6;color:var(--muted)}.album-qr-image{display:block;width:min(100%,220px);height:auto;margin:0 auto;padding:8px;background:#fdfbf7;border:1px solid #e8ded3}.album-qr-caption{display:block;margin-top:10px;font-size:9px;letter-spacing:.08em;color:var(--rose-dark)}
