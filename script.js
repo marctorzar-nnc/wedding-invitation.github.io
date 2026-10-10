@@ -11,10 +11,14 @@ const WEDDING = {
   // Set as YYYY-MM-DD when confirmed, for example 2027-02-28.
   isoDate: "",
   time: "Time to be announced",
-  venue: "Venue to be announced",
+  venue: "To Be Announced",
   address: "Quezon City, Philippines",
   hashtag: "#OurDayOnThe28th"
 };
+
+// Paste the deployed Google Apps Script Web App URL here (must end in /exec).
+// Keep blank until the Apps Script is deployed; the form will explain what's missing.
+const RSVP_ENDPOINT = "";
 
 document.addEventListener("DOMContentLoaded", function () {
   function setText(id, value) {
@@ -34,8 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const mapLink = document.getElementById("map-link");
   if (mapLink) {
-    const place = [WEDDING.venue, WEDDING.address].filter(Boolean).join(", ");
+    const venueIsKnown = WEDDING.venue && !/to be announced/i.test(WEDDING.venue);
+    const place = [venueIsKnown ? WEDDING.venue : "", WEDDING.address].filter(Boolean).join(", ");
     mapLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(place);
+    mapLink.setAttribute("aria-label", venueIsKnown ? "Open venue in Google Maps" : "Open the general area in Google Maps");
   }
 
   // Fade in cards and text as they enter the viewport.
@@ -92,15 +98,58 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Demo-only RSVP: no guest details are sent or stored without a connected service.
+  // RSVP: posts to a Google Apps Script web app. Its URL must be configured after deployment.
   const rsvpForm = document.getElementById("rsvp-form");
   const formMessage = document.getElementById("form-message");
+  const submitButton = rsvpForm ? rsvpForm.querySelector('button[type="submit"]') : null;
   if (rsvpForm && formMessage) {
-    rsvpForm.addEventListener("submit", function (event) {
+    rsvpForm.addEventListener("submit", async function (event) {
       event.preventDefault();
       if (!rsvpForm.reportValidity()) return;
-      formMessage.textContent = "Thanks! This demo form is working visually, but your RSVP has not been sent. Connect a form endpoint to receive responses.";
-      rsvpForm.reset();
+
+      if (!RSVP_ENDPOINT || !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(RSVP_ENDPOINT)) {
+        formMessage.textContent = "The RSVP form is ready, but the Google Sheets connection still needs to be deployed. Please check back soon.";
+        formMessage.classList.add("is-error");
+        return;
+      }
+
+      const data = new FormData(rsvpForm);
+      const payload = {
+        name: String(data.get("name") || "").trim(),
+        email: String(data.get("email") || "").trim(),
+        attendance: String(data.get("attendance") || ""),
+        notes: String(data.get("notes") || "").trim(),
+        website: String(data.get("website") || "")
+      };
+      if (payload.website) return; // honeypot: silently ignore automated submissions
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.setAttribute("aria-busy", "true");
+      }
+      formMessage.classList.remove("is-error");
+      formMessage.textContent = "Sending your RSVP…";
+
+      try {
+        // text/plain avoids a CORS preflight. Apps Script accepts JSON in postData.contents.
+        // no-cors means the browser cannot inspect Google's response, so we cannot verify a row from here.
+        await fetch(RSVP_ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify(payload)
+        });
+        formMessage.textContent = "Thank you! Your RSVP request has been sent. If you need to change your response, please contact us.";
+        rsvpForm.reset();
+      } catch (error) {
+        formMessage.textContent = "We couldn't send your RSVP just now. Please try again later or contact us directly.";
+        formMessage.classList.add("is-error");
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.removeAttribute("aria-busy");
+        }
+      }
     });
   }
 
