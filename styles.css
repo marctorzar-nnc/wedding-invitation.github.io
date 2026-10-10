@@ -38,3 +38,11 @@
 .memories-note{max-width:760px;margin:28px auto 65px;color:var(--muted);font-size:13px}
 .memories-note .eyebrow{color:var(--sage);font-size:10px;letter-spacing:.14em}
 @media(max-width:650px){.memories-page{padding:50px 7% 25px}.memories-hero{margin-bottom:45px}.memories-card{padding:26px 22px}.memories-page .site-footer{margin-top:40px}}
+
+/* RSVP submission feedback */
+.form-message[hidden]{display:none!important}
+.form-message{display:flex;align-items:flex-start;gap:14px;margin-top:18px;padding:18px;background:#f5efe7;border:1px solid var(--line);color:var(--ink)}
+.form-message .confirmation-icon{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#dce4da;color:#506b59;font-size:19px}
+.form-message.is-decline .confirmation-icon{background:#f4dfd9;color:#a85f51}
+.form-message strong{display:block;font-family:var(--serif);font-size:24px;font-weight:500;line-height:1.2}
+.form-message p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
