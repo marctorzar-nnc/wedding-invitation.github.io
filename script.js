@@ -1,15 +1,15 @@
 /*
  * WEDDING INVITATION SETTINGS
  * Update these values when the date, venue, and names are confirmed.
- * Month/year are placeholders because only the day 28 was provided.
+ * Wedding date: October 28, 2026.
  */
 const WEDDING = {
   names: "Marc & Angel",
   day: 28,
-  month: "MONTH",
-  year: "YEAR",
+  month: "October",
+  year: "2026",
   // Set as YYYY-MM-DD when confirmed, for example 2027-02-28.
-  isoDate: "",
+  isoDate: "2026-10-28",
   time: "Time to be announced",
   venue: "To Be Announced",
   address: "Quezon City, Philippines",
