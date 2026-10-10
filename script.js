@@ -18,7 +18,7 @@ const WEDDING = {
 
 // Paste the deployed Google Apps Script Web App URL here (must end in /exec).
 // Keep blank until the Apps Script is deployed; the form will explain what's missing.
-const RSVP_ENDPOINT = "";
+const RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxgx6ooG7-gXN53skuGtYbeY5_AmZwmZE6UFgy099ctocA867kJws8X0eFjhIcgmUA6tg/exec";
 
 document.addEventListener("DOMContentLoaded", function () {
   function setText(id, value) {
