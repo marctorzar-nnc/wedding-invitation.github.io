@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#fdfbf7">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23fdfbf7'/%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%23c98270'/%3E%3Ctext x='32' y='39' font-family='Georgia,serif' font-size='22' text-anchor='middle' fill='%2330332f'%3EMA%3C/text%3E%3C/svg%3E">
 <meta name="description" content="A little invitation to celebrate a beautiful beginning.">
 <title>Marc & Angel | Wedding Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=5">
-<script src="script.js?v=4" defer></script>
+<link rel="stylesheet" href="styles.css?v=6">
+<script src="script.js?v=5" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#home">Skip to invitation</a>
@@ -65,7 +66,7 @@
 <label for="guest-email">Email address <span class="optional">(optional)</span></label><input id="guest-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
 <fieldset><legend>Will you be attending? <span>*</span></legend><label class="radio-card"><input type="radio" name="attendance" value="Joyfully accepts" required><span>Joyfully accepts</span></label><label class="radio-card"><input type="radio" name="attendance" value="Regretfully declines"><span>Regretfully declines</span></label></fieldset>
 <label for="guest-notes">Dietary needs or a note <span class="optional">(optional)</span></label><textarea id="guest-notes" name="notes" rows="3" placeholder="Anything we should know?"></textarea>
-<button class="primary-button submit-button" type="submit">Send RSVP <span aria-hidden="true">↗</span></button><p class="form-note">Your response helps us plan our day. Please submit one RSVP per guest.</p><p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+<button class="primary-button submit-button" type="submit">Send RSVP <span aria-hidden="true">↗</span></button><p class="form-note">Your response helps us plan our day. Please submit one RSVP per guest.</p><div class="form-message" id="form-message" role="status" aria-live="polite" hidden></div>
 </form></div>
 <footer class="site-footer"><a class="brand footer-brand monogram" href="#home">M &amp; A</a><p>Thank you for being part of our story.</p><span class="footer-hashtag" id="event-hashtag">#OurDayOnThe28th</span></footer>
 </section>
