@@ -44,6 +44,86 @@ document.addEventListener("DOMContentLoaded", function () {
     mapLink.setAttribute("aria-label", venueIsKnown ? "Open venue in Google Maps" : "Open the general area in Google Maps");
   }
 
+  // Original synthesized ambient melody: gentle, optional, and looping. Browsers require a user gesture before audio can play.
+  const musicToggle = document.getElementById("music-toggle");
+  if (musicToggle) {
+    let audioContext = null;
+    let musicTimer = null;
+    let musicStep = 0;
+    let musicPlaying = false;
+    let padNodes = [];
+    const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 659.25, 523.25, 392.00, 440.00, 523.25, 659.25, 523.25, 493.88, 587.33, 659.25, 493.88];
+    const chords = [[261.63,329.63,392.00],[220.00,261.63,329.63],[174.61,220.00,261.63],[196.00,246.94,293.66]];
+
+    function playTone(frequency, startAt, duration, volume, wave) {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = wave || "sine";
+      oscillator.frequency.setValueAtTime(frequency, startAt);
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(volume, startAt + 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.start(startAt);
+      oscillator.stop(startAt + duration + 0.03);
+    }
+
+    function playChord() {
+      const chord = chords[Math.floor(musicStep / 4) % chords.length];
+      chord.forEach(function (frequency, index) {
+        playTone(frequency / 2, audioContext.currentTime, 2.35, 0.018 - index * 0.003, "sine");
+      });
+    }
+
+    function playMusicStep() {
+      if (!musicPlaying || !audioContext) return;
+      const now = audioContext.currentTime;
+      const note = melody[musicStep % melody.length];
+      playTone(note, now, 1.05, 0.075, "sine");
+      playTone(note * 2, now + 0.015, 0.55, 0.012, "triangle");
+      if (musicStep % 4 === 0) playChord();
+      musicStep = (musicStep + 1) % melody.length;
+    }
+
+    async function startMusic() {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) {
+        musicToggle.querySelector(".music-toggle-label").textContent = "Audio unavailable";
+        return;
+      }
+      if (!audioContext) audioContext = new AudioContextClass();
+      if (audioContext.state === "suspended") await audioContext.resume();
+      musicPlaying = true;
+      musicToggle.setAttribute("aria-pressed", "true");
+      musicToggle.setAttribute("aria-label", "Pause wedding background music");
+      musicToggle.querySelector(".music-toggle-label").textContent = "Pause music";
+      playMusicStep();
+      musicTimer = window.setInterval(playMusicStep, 620);
+    }
+
+    async function stopMusic() {
+      musicPlaying = false;
+      if (musicTimer) window.clearInterval(musicTimer);
+      musicTimer = null;
+      if (audioContext && audioContext.state === "running") await audioContext.suspend();
+      musicToggle.setAttribute("aria-pressed", "false");
+      musicToggle.setAttribute("aria-label", "Play gentle wedding background music");
+      musicToggle.querySelector(".music-toggle-label").textContent = "Play music";
+    }
+
+    musicToggle.addEventListener("click", function () {
+      if (musicPlaying) stopMusic();
+      else startMusic().catch(function () {
+        musicToggle.querySelector(".music-toggle-label").textContent = "Tap to retry";
+      });
+    });
+    window.addEventListener("pagehide", function () {
+      if (musicTimer) window.clearInterval(musicTimer);
+      if (audioContext && audioContext.state !== "closed") audioContext.close();
+    });
+  }
+
   // Fade in cards and text as they enter the viewport.
   const revealItems = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {
