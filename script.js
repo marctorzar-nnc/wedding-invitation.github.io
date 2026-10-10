@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Autoplay is attempted, but browsers may require a guest to tap the music button.
   const musicToggle = document.getElementById("music-toggle");
   if (musicToggle) {
-    const backgroundMusic = new Audio("assets/music/Merry-Go-Round-of-Life.mp3");
+    const backgroundMusic = new Audio("assets/music/Merry-Go-Round of Life - Howl's Moving Castle [Piano] _ Joe Hisaishi 4.mp3");
     backgroundMusic.loop = true;
     backgroundMusic.preload = "auto";
     backgroundMusic.volume = 0.65;
