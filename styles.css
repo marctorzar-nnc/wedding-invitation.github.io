@@ -100,3 +100,13 @@
 @media(max-width:900px){.attire-grid{grid-template-columns:1fr}.attire-card{grid-template-columns:.8fr 1.2fr}.attire-art{min-height:340px}}
 @media(max-width:650px){.attire-section{margin:42px 0 0;padding:24px 15px}.attire-heading{margin-bottom:22px}.attire-card{grid-template-columns:.86fr 1.14fr}.attire-art{min-height:285px;padding-left:4px;padding-right:4px}.attire-art-label{font-size:7px;left:8px}.attire-copy{padding:18px 12px}.attire-copy h4{font-size:23px}.attire-copy p{font-size:10px}.attire-kicker{font-size:7px}.attire-swatches{gap:4px}.attire-note{font-size:14px;align-items:flex-start}}
 @media(max-width:380px){.attire-card{grid-template-columns:1fr}.attire-art{min-height:290px}.attire-copy{padding:20px}}
+
+/* Comfort-first mannequin attire refinement */
+.attire-art{background:linear-gradient(160deg,#eee6f2 0%,#f7ece9 55%,#e3e8dd 100%)}
+.attire-card{border-radius:18px;overflow:hidden}
+.attire-art{min-height:300px}
+.fashion-figure{max-width:225px;filter:drop-shadow(0 9px 9px rgba(59,52,57,.10))}
+.attire-copy h4{color:#805c6a}
+.attire-note{padding:15px 18px;background:rgba(255,250,243,.72);border:1px solid rgba(229,216,221,.75);border-radius:999px}
+.attire-kicker{letter-spacing:.09em}
+@media(max-width:650px){.attire-note{border-radius:12px;padding:12px}.attire-art{min-height:270px}}
