@@ -110,3 +110,27 @@
 .attire-note{padding:15px 18px;background:rgba(255,250,243,.72);border:1px solid rgba(229,216,221,.75);border-radius:999px}
 .attire-kicker{letter-spacing:.09em}
 @media(max-width:650px){.attire-note{border-radius:12px;padding:12px}.attire-art{min-height:270px}}
+
+/* Mobile attire layout: put larger faceless mannequins above the outfit text. */
+@media(max-width:650px){
+  .attire-section{margin:38px 0 0;padding:24px 14px 20px}
+  .attire-grid{grid-template-columns:1fr;gap:18px}
+  .attire-card{grid-template-columns:1fr;grid-template-rows:auto auto;border-radius:16px}
+  .attire-art{min-height:0;height:clamp(290px,82vw,370px);align-items:flex-end;padding:35px 18px 0}
+  .fashion-figure{width:min(76%,260px);max-width:260px;max-height:100%;object-fit:contain}
+  .attire-art-label{top:15px;left:16px;font-size:8px}
+  .attire-copy{padding:22px 20px 24px}
+  .attire-kicker{font-size:8px;letter-spacing:.12em}
+  .attire-copy h4{font-size:29px;margin:7px 0 10px}
+  .attire-copy p{font-size:13px;line-height:1.75}
+  .attire-swatches{margin-top:14px;gap:7px}
+  .attire-swatches i{width:14px;height:14px}
+  .attire-swatches span{font-size:10px}
+  .attire-note{border-radius:14px;padding:14px 16px;line-height:1.55;justify-content:flex-start;text-align:left}
+  .music-toggle{right:12px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));padding:9px 11px;gap:7px;max-width:calc(100vw - 24px)}
+}
+@media(min-width:651px) and (max-width:900px){
+  .attire-card{grid-template-columns:.85fr 1.15fr}
+  .attire-art{min-height:330px}
+  .attire-copy{padding:22px 16px}
+}
