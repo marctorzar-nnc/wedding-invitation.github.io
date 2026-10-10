@@ -44,45 +44,58 @@ document.addEventListener("DOMContentLoaded", function () {
     mapLink.setAttribute("aria-label", venueIsKnown ? "Open venue in Google Maps" : "Open the general area in Google Maps");
   }
 
-  // Original synthesized ambient melody: gentle, optional, and looping. Browsers require a user gesture before audio can play.
+  // Soft original wedding ambience with melody, warm bass, and gentle chord harmony.
+  // Attempt autoplay on page load; browsers may require one tap before allowing sound.
   const musicToggle = document.getElementById("music-toggle");
   if (musicToggle) {
     let audioContext = null;
     let musicTimer = null;
     let musicStep = 0;
     let musicPlaying = false;
-    let padNodes = [];
-    const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 659.25, 523.25, 392.00, 440.00, 523.25, 659.25, 523.25, 493.88, 587.33, 659.25, 493.88];
-    const chords = [[261.63,329.63,392.00],[220.00,261.63,329.63],[174.61,220.00,261.63],[196.00,246.94,293.66]];
+    const melody = [523.25,659.25,783.99,659.25,587.33,659.25,523.25,392.00,440.00,523.25,659.25,523.25,493.88,587.33,659.25,493.88];
+    const chords = [
+      [261.63,329.63,392.00], // C major
+      [220.00,261.63,329.63], // A minor
+      [174.61,220.00,261.63], // F major
+      [196.00,246.94,293.66]  // G major
+    ];
+    const bassNotes = [130.81,110.00,87.31,98.00];
 
-    function playTone(frequency, startAt, duration, volume, wave) {
+    function playTone(frequency, startAt, duration, volume, wave, attack) {
       const oscillator = audioContext.createOscillator();
       const gain = audioContext.createGain();
       oscillator.type = wave || "sine";
       oscillator.frequency.setValueAtTime(frequency, startAt);
       gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(volume, startAt + 0.06);
+      gain.gain.exponentialRampToValueAtTime(volume, startAt + (attack || 0.09));
       gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
       oscillator.connect(gain);
       gain.connect(audioContext.destination);
       oscillator.start(startAt);
-      oscillator.stop(startAt + duration + 0.03);
+      oscillator.stop(startAt + duration + 0.04);
     }
 
-    function playChord() {
-      const chord = chords[Math.floor(musicStep / 4) % chords.length];
+    function playHarmony(now) {
+      const chordIndex = Math.floor(musicStep / 4) % chords.length;
+      const chord = chords[chordIndex];
+      // Sustained, quiet chord tones underneath the melody.
       chord.forEach(function (frequency, index) {
-        playTone(frequency / 2, audioContext.currentTime, 2.35, 0.018 - index * 0.003, "sine");
+        playTone(frequency, now, 2.2, 0.014 - index * 0.002, "sine", 0.22);
       });
+      // Gentle low bass note adds warmth without overpowering the melody.
+      playTone(bassNotes[chordIndex], now, 1.65, 0.035, "triangle", 0.16);
+      // A light broken-chord sparkle, like soft piano notes.
+      playTone(chord[(musicStep / 2) % chord.length | 0], now + 0.31, 0.7, 0.018, "sine", 0.05);
+      playTone(chord[(Math.floor(musicStep / 2) + 1) % chord.length], now + 0.62, 0.7, 0.015, "sine", 0.05);
     }
 
     function playMusicStep() {
       if (!musicPlaying || !audioContext) return;
       const now = audioContext.currentTime;
       const note = melody[musicStep % melody.length];
-      playTone(note, now, 1.05, 0.075, "sine");
-      playTone(note * 2, now + 0.015, 0.55, 0.012, "triangle");
-      if (musicStep % 4 === 0) playChord();
+      playTone(note, now, 1.0, 0.065, "sine", 0.08);
+      playTone(note * 2, now + 0.02, 0.48, 0.009, "triangle", 0.05);
+      if (musicStep % 4 === 0) playHarmony(now);
       musicStep = (musicStep + 1) % melody.length;
     }
 
@@ -90,16 +103,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (!AudioContextClass) {
         musicToggle.querySelector(".music-toggle-label").textContent = "Audio unavailable";
-        return;
+        return false;
       }
       if (!audioContext) audioContext = new AudioContextClass();
       if (audioContext.state === "suspended") await audioContext.resume();
+      if (audioContext.state !== "running") return false;
+      if (musicTimer) window.clearInterval(musicTimer);
       musicPlaying = true;
       musicToggle.setAttribute("aria-pressed", "true");
       musicToggle.setAttribute("aria-label", "Pause wedding background music");
       musicToggle.querySelector(".music-toggle-label").textContent = "Pause music";
       playMusicStep();
       musicTimer = window.setInterval(playMusicStep, 620);
+      return true;
     }
 
     async function stopMusic() {
@@ -108,16 +124,26 @@ document.addEventListener("DOMContentLoaded", function () {
       musicTimer = null;
       if (audioContext && audioContext.state === "running") await audioContext.suspend();
       musicToggle.setAttribute("aria-pressed", "false");
-      musicToggle.setAttribute("aria-label", "Play gentle wedding background music");
+      musicToggle.setAttribute("aria-label", "Play wedding background music");
       musicToggle.querySelector(".music-toggle-label").textContent = "Play music";
     }
 
     musicToggle.addEventListener("click", function () {
       if (musicPlaying) stopMusic();
-      else startMusic().catch(function () {
-        musicToggle.querySelector(".music-toggle-label").textContent = "Tap to retry";
+      else startMusic().then(function (started) {
+        if (!started) musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
+      }).catch(function () {
+        musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
       });
     });
+
+    // Browsers that permit autoplay start immediately; otherwise leave a one-tap fallback.
+    startMusic().then(function (started) {
+      if (!started) musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
+    }).catch(function () {
+      musicToggle.querySelector(".music-toggle-label").textContent = "Tap for music";
+    });
+
     window.addEventListener("pagehide", function () {
       if (musicTimer) window.clearInterval(musicTimer);
       if (audioContext && audioContext.state !== "closed") audioContext.close();
