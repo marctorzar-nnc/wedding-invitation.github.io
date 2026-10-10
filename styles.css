@@ -134,3 +134,21 @@
   .attire-art{min-height:330px}
   .attire-copy{padding:22px 16px}
 }
+
+/* Final mobile polish: unmistakably faceless mannequins and no music-button overlap. */
+.attire-art svg{position:relative;z-index:1}
+.attire-men .fashion-figure > ellipse:nth-of-type(2),
+.attire-women .fashion-figure > ellipse:nth-of-type(2){fill:#f3eee8;stroke:#d8c9c6;stroke-width:1.2}
+.attire-men .fashion-figure > path:nth-of-type(2),
+.attire-women .fashion-figure > path:nth-of-type(2){display:none}
+.attire-men .fashion-figure > path:nth-of-type(1),
+.attire-women .fashion-figure > path:nth-of-type(1){fill:#d7c5bb}
+@media(max-width:650px){
+  .attire-section .attire-card{display:flex;flex-direction:column}
+  .attire-section .attire-art{height:clamp(310px,88vw,390px);min-height:310px;display:flex;align-items:flex-end;justify-content:center;padding:42px 12px 0}
+  .attire-section .fashion-figure{display:block;width:min(78%,285px);max-width:285px;height:100%;max-height:345px;object-fit:contain}
+  .attire-section .attire-copy{padding:22px 20px 24px}
+  .details-section{padding-bottom:110px}
+  .attire-note{margin-bottom:8px}
+  .music-toggle{right:14px;bottom:calc(12px + env(safe-area-inset-bottom, 0px));padding:9px 12px;box-shadow:0 4px 16px rgba(59,52,57,.12)}
+}
