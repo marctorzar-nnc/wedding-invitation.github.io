@@ -4,7 +4,7 @@
  * Month/year are placeholders because only the day 28 was provided.
  */
 const WEDDING = {
-  names: "Marc & Your Name",
+  names: "Marc & Angel",
   day: 28,
   month: "MONTH",
   year: "YEAR",
