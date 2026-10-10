@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
         submitButton.setAttribute("aria-busy", "true");
       }
       formMessage.classList.remove("is-error");
+      formMessage.hidden = false;
       formMessage.textContent = "Sending your RSVP…";
 
       try {
@@ -139,7 +140,15 @@ document.addEventListener("DOMContentLoaded", function () {
           headers: { "Content-Type": "text/plain;charset=UTF-8" },
           body: JSON.stringify(payload)
         });
-        formMessage.textContent = "Thank you! Your RSVP request has been sent. If you need to change your response, please contact us.";
+        formMessage.hidden = false;
+        formMessage.classList.remove("is-error", "is-accept", "is-decline");
+        if (payload.attendance === "Joyfully accepts") {
+          formMessage.classList.add("is-accept");
+          formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">✓</span><div><strong>Thank you for saying yes!</strong><p>Your RSVP request has been sent. We can’t wait to celebrate this special day with you.</p></div>';
+        } else {
+          formMessage.classList.add("is-decline");
+          formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">♥</span><div><strong>Thank you for letting us know.</strong><p>We’re sorry you won’t be joining us in person, but we’re grateful you took a moment to respond. You’ll be in our hearts on our special day.</p></div>';
+        }
         rsvpForm.reset();
       } catch (error) {
         formMessage.textContent = "We couldn't send your RSVP just now. Please try again later or contact us directly.";
