@@ -200,3 +200,8 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 
 /* Use the uploaded detailed fashion artwork as the attire model illustration */
 .attire-models-image{width:min(100%,1050px);margin:28px auto 34px;overflow:hidden;border:1px solid var(--line,#ded3c2);border-radius:22px;background:#f7f0e4}.attire-models-image img{display:block;width:100%;height:auto;object-fit:contain}.attire-grid{align-items:stretch}.attire-card{grid-template-columns:minmax(0,1fr)!important}.attire-copy{width:100%;padding:28px 30px}.attire-copy p{max-width:62ch}@media(max-width:700px){.attire-models-image{margin:20px auto 24px;border-radius:14px}.attire-copy{padding:22px}}
+
+
+/* Separate the attire reference into gentleman and ladies columns */
+.attire-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:stretch}.attire-card{display:flex!important;flex-direction:column;min-width:0;overflow:hidden}.attire-models-image{width:100%;margin:0 0 8px;border:0;border-radius:14px 14px 0 0;overflow:hidden;background:#f7f0e4}.attire-models-image img{display:block;width:100%;height:auto;object-fit:contain}.attire-men-image img{object-position:left center;transform:scale(1.7);transform-origin:17% 50%;width:100%;clip-path:inset(0 50% 0 0);margin-right:-50%}.attire-women-image img{object-position:right center;transform:scale(1.7);transform-origin:83% 50%;width:100%;clip-path:inset(0 0 0 50%);margin-left:0}.attire-copy{padding:22px 24px 26px!important}.attire-copy h4{margin-top:8px}.attire-copy p{max-width:none}.attire-note{margin-top:24px}
+@media(max-width:700px){.attire-grid{grid-template-columns:1fr;gap:18px}.attire-models-image{margin-bottom:4px}.attire-copy{padding:20px 22px 24px!important}}
