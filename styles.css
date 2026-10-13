@@ -188,3 +188,7 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 
 /* Natural fashion-figure posture and garment detailing */
 .attire-art{padding-top:12px}.fashion-figure{max-width:244px;transform:translateY(2px);filter:drop-shadow(0 5px 5px rgba(83,72,54,.05))}.attire-art-label{letter-spacing:.15em}
+
+/* Pair fashion sketches and five-color neutral motif */
+.fashion-pair{width:100%;max-width:100%;height:auto;max-height:390px;display:block;margin:12px auto 0}.attire-art{display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden}.attire-swatches i:nth-child(1){background:#f7edda}.attire-swatches i:nth-child(2){background:#cdbb9d}.attire-swatches i:nth-child(3){background:#a6ad91}.attire-swatches i:nth-child(4){background:#747b59}.attire-swatches i:nth-child(5){background:#354735}.attire-swatches i{display:inline-block;flex:0 0 12px;width:12px;height:12px;border-radius:50%;margin-right:5px;border:1px solid rgba(80,68,49,.12)}.attire-copy p{line-height:1.65}
+@media(max-width:700px){.fashion-pair{max-height:330px;min-width:0}.attire-card{grid-template-columns:minmax(0,1fr)}.attire-art{min-height:300px}.attire-copy{padding:22px}}
