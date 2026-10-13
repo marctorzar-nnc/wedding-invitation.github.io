@@ -176,3 +176,8 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 
 /* Uploaded guest attire reference image */
 .attire-guide-image{max-width:420px;margin:0 auto 28px;text-align:center;position:relative;z-index:1}.attire-guide-image img{display:block;width:100%;height:auto;max-height:640px;object-fit:contain;margin:0 auto;border-radius:4px;box-shadow:0 12px 32px rgba(65,56,47,.08)}
+
+
+/* Neutral wedding motif: faceless mannequin attire illustrations */
+:root{--ivory:#f8f3e9;--paper:#efe6d7;--rose:#b6a58c;--rose-dark:#5c5b3a;--sage:#a6a28a;--sage-light:#e6dfd1;--ink:#403b31;--muted:#786f61;--line:#ded3c2;--lavender:#c8bba6;--lavender-light:#f0e8dc;--capiz:#fffaf1}
+.attire-section{background:linear-gradient(145deg,rgba(239,230,215,.92),rgba(250,247,239,.97));border-color:#ded3c2}.attire-section:before,.attire-section:after{border-color:rgba(166,162,138,.28);box-shadow:0 0 0 12px rgba(255,250,241,.22),0 0 0 24px rgba(166,162,138,.08)}.attire-heading h3 em{color:#777354}.attire-card{background:rgba(255,250,241,.92);border-color:#ded3c2}.attire-art,.attire-women .attire-art{background:linear-gradient(160deg,#eee6d8,#f8f3e9 58%,#e4e1d4)}.attire-art-label,.attire-kicker{color:#777354}.attire-swatches i:nth-child(1){background:#f2ead9}.attire-swatches i:nth-child(2){background:#c7b79b}.attire-swatches i:nth-child(3){background:#a6a28a}.attire-note{background:#e9e1d2;border-color:#d8ccb8;color:#5c5b3a}.attire-guide-image{display:none}
