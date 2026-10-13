@@ -185,3 +185,6 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 
 /* Refined neutral fashion-figure sketches inspired by the guest attire guide */
 .attire-art{background:linear-gradient(155deg,#f1e9dc 0%,#f8f3e9 62%,#e7e2d5 100%)}.attire-women .attire-art{background:linear-gradient(155deg,#f1e9dc 0%,#f8f3e9 62%,#e7e2d5 100%)}.fashion-figure{max-width:236px;filter:drop-shadow(0 5px 5px rgba(83,72,54,.06))}.attire-art-label{color:#777354}
+
+/* Natural fashion-figure posture and garment detailing */
+.attire-art{padding-top:12px}.fashion-figure{max-width:244px;transform:translateY(2px);filter:drop-shadow(0 5px 5px rgba(83,72,54,.05))}.attire-art-label{letter-spacing:.15em}
