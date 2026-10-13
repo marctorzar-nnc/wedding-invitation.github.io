@@ -6,7 +6,7 @@
 const SPREADSHEET_ID = "1xw09X1YEHvIQLJOZX9bbDFQ8mzM_qIKP9XTiST8PgY8";
 const RESPONSE_SHEET_NAME = "RSVP Responses";
 const OWNER_EMAIL = "danietorzar00@gmail.com";
-const HEADERS = ["Timestamp", "Guest Name", "Email", "Attendance", "Invitation Type", "Ceremony Seat", "Reception Status", "Dietary Needs / Note", "Private Album Invite Status", "Owner Notification Status"];
+const HEADERS = ["Timestamp", "Guest Name", "Email", "Attendance", "Dietary Needs / Note", "Private Album Invite Status", "Owner Notification Status", "Invitation Type", "Ceremony Seat", "Reception Status"];
 
 // Only the couple's approved guest list is eligible to submit an RSVP.
 // Match normalized full names or a unique first name, since the couple confirmed
@@ -63,12 +63,12 @@ function doPost(e) {
       safeCellText(name),
       safeCellText(email),
       attendance,
-      guest.type,
-      guest.type === "Ceremony + Reception" && accepted ? "Allocated (13 guest seats max; couple occupies 2 venue places)" : (guest.type === "Ceremony + Reception" ? "Declined" : "Not applicable"),
-      accepted ? "Accepted" : "Declined",
       safeCellText(notes),
       accepted ? "Pending manual Google Photos invite" : "Not eligible",
-      accepted ? "Pending" : "Not required"
+      accepted ? "Pending" : "Not required",
+      guest.type,
+      guest.type === "Ceremony + Reception" && accepted ? "Eligible (13 guest seats max; couple occupies 2 venue places)" : (guest.type === "Ceremony + Reception" ? "Declined" : "Not applicable"),
+      accepted ? "Accepted" : "Declined"
     ]);
 
     if (accepted) {
@@ -82,10 +82,10 @@ function doPost(e) {
             "\n\nNext step: confirm the guest's Google Account and manually add it to the restricted Google Photos album. The album link is intentionally not included in this email.",
           name: "Marc & Angel Wedding RSVP"
         });
-        sheet.getRange(row, 10).setValue("Sent to owner");
+        sheet.getRange(row, 7).setValue("Sent to owner");
       } catch (mailError) {
         console.error("Notification email failed: " + String(mailError));
-        sheet.getRange(row, 10).setValue("Failed — check Apps Script logs");
+        sheet.getRange(row, 7).setValue("Failed — check Apps Script logs");
       }
     }
     return jsonResponse({ ok: true });
