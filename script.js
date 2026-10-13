@@ -10,9 +10,10 @@ const WEDDING = {
   year: "2026",
   // Set as YYYY-MM-DD when confirmed, for example 2027-02-28.
   isoDate: "2026-10-28",
-  time: "Time to be announced",
-  venue: "To Be Announced",
-  address: "Quezon City, Philippines",
+  time: "2:00 PM",
+  venue: "One Heart Wedding Events Management and Services",
+  address: "87 Maginoo Street, Barangay Central, Quezon City, Metro Manila, Philippines",
+  reception: "To Be Announced",
   hashtag: "#OurDayOnThe28th"
 };
 
@@ -33,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
   setText("event-time", WEDDING.time);
   setText("event-venue", WEDDING.venue);
   setText("event-address", WEDDING.address);
+  setText("event-reception", WEDDING.reception);
   setText("event-hashtag", WEDDING.hashtag);
   document.title = WEDDING.names + " | Wedding Invitation";
 
