@@ -21,6 +21,33 @@ const WEDDING = {
 // Keep blank until the Apps Script is deployed; the form will explain what's missing.
 const RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbxgx6ooG7-gXN53skuGtYbeY5_AmZwmZE6UFgy099ctocA867kJws8X0eFjhIcgmUA6tg/exec";
 
+// Guest-facing lookup mirrors the server-side allowlist. The Apps Script validates
+// again before recording an RSVP; this browser list is for the immediate message.
+const CEREMONY_GUESTS = [
+  "Melanie Ann", "Randy Soria", "Estrella Soria", "Marlene Torzar",
+  "Danilo Torzar", "Matt Torzar", "Vergie Formento", "Benigno Formento",
+  "Benjamin Formento", "Antonette Formento", "Ephrem Formento", "Rodelyn", "Ryan"
+];
+const RECEPTION_GUESTS = [
+  "Rommel Soria", "Marilyn Soria", "Jing Torzar", "Myla Torzar",
+  "Jersey Torzar", "Jessie Torzar", "Paula Formento", "Ruby", "Yesha"
+];
+function normalizeGuestName(value) {
+  return String(value || "").normalize("NFD").replace(/[\\u0300-\\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\\s+/g, " ").trim();
+}
+function findInvitationType(value) {
+  const input = normalizeGuestName(value);
+  if (!input) return "";
+  for (const name of CEREMONY_GUESTS) {
+    if (input === normalizeGuestName(name) || input.split(" ")[0] === normalizeGuestName(name).split(" ")[0]) return "Ceremony + Reception";
+  }
+  for (const name of RECEPTION_GUESTS) {
+    if (input === normalizeGuestName(name) || input.split(" ")[0] === normalizeGuestName(name).split(" ")[0]) return "Reception only";
+  }
+  return "";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   function setText(id, value) {
     const element = document.getElementById(id);
@@ -178,6 +205,14 @@ document.addEventListener("DOMContentLoaded", function () {
         website: String(data.get("website") || "")
       };
       if (payload.website) return; // honeypot: silently ignore automated submissions
+      const invitationType = findInvitationType(payload.name);
+      if (!invitationType) {
+        formMessage.hidden = false;
+        formMessage.classList.remove("is-accept", "is-decline");
+        formMessage.classList.add("is-error");
+        formMessage.textContent = "We couldn't match that name to our invitation list. Please enter the name shown on your invitation or contact Marc and Angel.";
+        return;
+      }
 
       if (submitButton) {
         submitButton.disabled = true;
@@ -200,7 +235,11 @@ document.addEventListener("DOMContentLoaded", function () {
         formMessage.classList.remove("is-error", "is-accept", "is-decline");
         if (payload.attendance === "Joyfully accepts") {
           formMessage.classList.add("is-accept");
-          formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">✓</span><div class="acceptance-confirmation"><strong>Thank you for saying yes!</strong><p>Your RSVP request has been sent. We can’t wait to celebrate this special day with you.</p><div class="album-qr-panel"><span class="album-qr-heading">A little keepsake for our celebration</span><p>Scan this code to open our shared photo album. Album access is still limited to guests invited through Google Photos.</p><img class="album-qr-image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAIAAACx0UUtAAAE1UlEQVR42u3dvW6cQBQG0DjKG6Xx+1dp8jwuLEvpXWx0df8GOKd1sgvspxk+AcPb1+fHDzjYT4cAGQUZRUZBRkFGkVGQUWQUZBRkFBkFGQUZRUZBRpFRkFGQUW7jV+Y//35/n9nKv3/+zGzVty/69lGv/5rZ5te7EPre0Gac+QsaRzHXg4wio3CXzlR4Xhw6lw+VlVD/KOxbhV7vwhV/QeMo5nqQUZBRHtmZMmfNobP1zHWXvtIQajaFNajvOPd9snEUcz3IKMgoOtOeUB3JXJQKVbdMSerriMZRkFFkFGQUnteZCotO5nsLe8+ZdwwaR0FGkVGQUXSmzg6RkekQfdd7CldbKLyvr3B/jaMgo8goyCg6016VKSxnfXfQZf4a2ubCrbrEL2gcxVwPMoqMwk0705n3fY1VmcKjccgdg8ZRkFFkFGQUvnv7+vxY+eKxtyiFvveQZeUyG3nI0ShsY8ZRzPUgo8gobKp8p+3YK1/7NnJr2fK+wpEpdmP3BBpHMdeDjCKjcK7UdabMWXPfmgihHpDpEFsVqq8GFW6V60yY60FGQUa5icbnmTIPEvUVrLE2NlZ0QutHFP7cYxXKOIq5HmQUGYXLdqbX58WFJ/5bN/KFNmNsJfLQ9xbur+tMIKPIKMgoOlOnwutMY6vb9S2gcMiq3qGnu/oW9zOOYq4HGUVG4RmdaezKSl8PKKxufU9Z3WDJQeMo5nqQUZBRLmNtrfG+rjZ2Lp9pkH3b3HdxyPNMIKPIKMgoOlNndwmdgG/940wbK+wQWy+RyhzJvqpqHMVcDzKKjMKmxueZxrrL6388tk553wuZxhYVzNxeaBzFXA8yCjKKzlRakjIn/n0n71uvbc3s0dZh905bkFFkFGQUnSl31rz1gqLMVZnMF2WOxlY5y3S1zJE0jmKuBxkFGeUy5p5nusHbYwsLZV/D6PuNtrbZOIq5HmQUGYXLdqaxJRL6HtkJbfOWrbUYthZ9MI5irgcZRUbhLp2pT+FFmq02Vnif29YeFe6gcRRzPcgoyCiP7ExXvAuur9hlFC6m3vdCpsJf3ziKuR5kFGSUy5hbazzTPwoXfRh7XWxmmwuXwht7l6578zDXg4yCjKIz5RpG5gR8bP3sTN/qKzqZcpapUKGtMo5irgcZBRlFZ/pfS+jrW33XP/oeQhorlJn2mXmXrnEUZBQZBRnlERrXgBhbXmHrsaqxB4n6HtgqXB6+b5uNo5jrQUaRUdhU+U7brb4VKhxbCzdkNnJsvfBMo+ordsZRzPUgo8gobDp0rfGxRvX6k7cuShUuWBfa/UxnMo5irgcZBRnlng69zhQ6PQ81jMxqC5lWtLVAeGaVh8z+Gkcx14OMgoyiMwW7S18b61vebWyh7tD3Ft58WLichHvzMNeDjIKMojN19p6tJdoK15HrW/Oi8KPGHm8yjmKuBxkFGUVn2tN3+1nmYsnWLYKFa99ljrNxFHM9yCjIKDrTHW29vanwrr+xS3R9x8o4irkeZBQZhUd2pkPeiJo50888V9R3japw6fHMI0pjl52Mo5jrQUaRUdiUWmv8kHXzMi0hUykKe0/fSuSZXeh7l5VxFHM9yCjIKM/oTGAcBRlFRkFGkVGQUZBRZBRkFBkFGQUZRUZBRkFGkVGQUWQUZBQC/gEaSMiWigU8bQAAAABJRU5ErkJggg==" alt="QR code for the private Marc and Angel wedding photo album"><span class="album-qr-caption">Our Wedding Memories · Marc &amp; Angel</span></div></div>';
+          if (invitationType === "Ceremony + Reception") {
+            formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">✓</span><div class="acceptance-confirmation"><strong>Your ceremony and reception RSVP has been received!</strong><p>We look forward to seeing you at One Heart Wedding Events Management and Services at 2:00 PM. Please note that ceremony attendance is limited to the approved guest list and venue capacity.</p><div class="album-qr-panel"><span class="album-qr-heading">A little keepsake for our celebration</span><p>Scan this code to open our shared photo album. Album access is still limited to guests invited through Google Photos.</p><img class="album-qr-image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAIAAACx0UUtAAAE1UlEQVR42u3dvW6cQBQG0DjKG6Xx+1dp8jwuLEvpXWx0df8GOKd1sgvspxk+AcPb1+fHDzjYT4cAGQUZRUZBRkFGkVGQUWQUZBRkFBkFGQUZRUZBRpFRkFGQUW7jV+Y//35/n9nKv3/+zGzVty/69lGv/5rZ5te7EPre0Gac+QsaRzHXg4wio3CXzlR4Xhw6lw+VlVD/KOxbhV7vwhV/QeMo5nqQUZBRHtmZMmfNobP1zHWXvtIQajaFNajvOPd9snEUcz3IKMgoOtOeUB3JXJQKVbdMSerriMZRkFFkFGQUnteZCotO5nsLe8+ZdwwaR0FGkVGQUXSmzg6RkekQfdd7CldbKLyvr3B/jaMgo8goyCg6016VKSxnfXfQZf4a2ubCrbrEL2gcxVwPMoqMwk0705n3fY1VmcKjccgdg8ZRkFFkFGQUvnv7+vxY+eKxtyiFvveQZeUyG3nI0ShsY8ZRzPUgo8gobKp8p+3YK1/7NnJr2fK+wpEpdmP3BBpHMdeDjCKjcK7UdabMWXPfmgihHpDpEFsVqq8GFW6V60yY60FGQUa5icbnmTIPEvUVrLE2NlZ0QutHFP7cYxXKOIq5HmQUGYXLdqbX58WFJ/5bN/KFNmNsJfLQ9xbur+tMIKPIKMgoOlOnwutMY6vb9S2gcMiq3qGnu/oW9zOOYq4HGUVG4RmdaezKSl8PKKxufU9Z3WDJQeMo5nqQUZBRLmNtrfG+rjZ2Lp9pkH3b3HdxyPNMIKPIKMgoOlNndwmdgG/940wbK+wQWy+RyhzJvqpqHMVcDzKKjMKmxueZxrrL6388tk553wuZxhYVzNxeaBzFXA8yCjKKzlRakjIn/n0n71uvbc3s0dZh905bkFFkFGQUnSl31rz1gqLMVZnMF2WOxlY5y3S1zJE0jmKuBxkFGeUy5p5nusHbYwsLZV/D6PuNtrbZOIq5HmQUGYXLdqaxJRL6HtkJbfOWrbUYthZ9MI5irgcZRUbhLp2pT+FFmq02Vnif29YeFe6gcRRzPcgoyCiP7ExXvAuur9hlFC6m3vdCpsJf3ziKuR5kFGSUy5hbazzTPwoXfRh7XWxmmwuXwht7l6578zDXg4yCjKIz5RpG5gR8bP3sTN/qKzqZcpapUKGtMo5irgcZBRlFZ/pfS+jrW33XP/oeQhorlJn2mXmXrnEUZBQZBRnlERrXgBhbXmHrsaqxB4n6HtgqXB6+b5uNo5jrQUaRUdhU+U7brb4VKhxbCzdkNnJsvfBMo+ordsZRzPUgo8gobDp0rfGxRvX6k7cuShUuWBfa/UxnMo5irgcZBRnlng69zhQ6PQ81jMxqC5lWtLVAeGaVh8z+Gkcx14OMgoyiMwW7S18b61vebWyh7tD3Ft58WLichHvzMNeDjIKMojN19p6tJdoK15HrW/Oi8KPGHm8yjmKuBxkFGUVn2tN3+1nmYsnWLYKFa99ljrNxFHM9yCjIKDrTHW29vanwrr+xS3R9x8o4irkeZBQZhUd2pkPeiJo50888V9R3japw6fHMI0pjl52Mo5jrQUaRUdiUWmv8kHXzMi0hUykKe0/fSuSZXeh7l5VxFHM9yCjIKM/oTGAcBRlFRkFGkVGQUZBRZBRkFBkFGQUZRUZBRkFGkVGQUWQUZBQC/gEaSMiWigU8bQAAAABJRU5ErkJggg==" alt="QR code for the private Marc and Angel wedding photo album"><span class="album-qr-caption">Our Wedding Memories · Marc &amp; Angel</span></div></div>';
+          } else {
+            formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">♥</span><div class="acceptance-confirmation"><strong>Thank you for your RSVP!</strong><p>Your invitation is for the reception only. Please proceed directly to the reception venue; we will share the reception location once it is finalized.</p></div>';
+          }
         } else {
           formMessage.classList.add("is-decline");
           formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">♥</span><div><strong>Thank you for letting us know.</strong><p>We’re sorry you won’t be joining us in person, but we’re grateful you took a moment to respond. You’ll be in our hearts on our special day.</p></div>';
