@@ -6,7 +6,20 @@
 const SPREADSHEET_ID = "1xw09X1YEHvIQLJOZX9bbDFQ8mzM_qIKP9XTiST8PgY8";
 const RESPONSE_SHEET_NAME = "RSVP Responses";
 const OWNER_EMAIL = "danietorzar00@gmail.com";
-const HEADERS = ["Timestamp", "Guest Name", "Email", "Attendance", "Dietary Needs / Note", "Private Album Invite Status", "Owner Notification Status"];
+const HEADERS = ["Timestamp", "Guest Name", "Email", "Attendance", "Invitation Type", "Ceremony Seat", "Reception Status", "Dietary Needs / Note", "Private Album Invite Status", "Owner Notification Status"];
+
+// Only the couple's approved guest list is eligible to submit an RSVP.
+// Match normalized full names or a unique first name, since the couple confirmed
+// there are no duplicate first names in their manually prepared list.
+const CEREMONY_GUESTS = [
+  "Melanie Ann", "Randy Soria", "Estrella Soria", "Marlene Torzar",
+  "Danilo Torzar", "Matt Torzar", "Vergie Formento", "Benigno Formento",
+  "Benjamin Formento", "Antonette Formento", "Ephrem Formento", "Rodelyn", "Ryan"
+];
+const RECEPTION_GUESTS = [
+  "Rommel Soria", "Marilyn Soria", "Jing Torzar", "Myla Torzar",
+  "Jersey Torzar", "Jessie Torzar", "Paula Formento", "Ruby", "Yesha"
+];
 
 function doGet() {
   return ContentService.createTextOutput("Wedding RSVP endpoint is running.").setMimeType(ContentService.MimeType.TEXT);
@@ -23,6 +36,8 @@ function doPost(e) {
     const website = cleanText(data.website, 200);
     if (website) return jsonResponse({ ok: true });
     if (!name) throw new Error("Guest name is required.");
+    const guest = findApprovedGuest(name);
+    if (!guest) throw new Error("We couldn't match that name to the invitation list. Please use the name on your invitation or contact Marc and Angel.");
     if (["Joyfully accepts", "Regretfully declines"].indexOf(attendance) === -1) throw new Error("Invalid attendance response.");
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Invalid email address.");
 
@@ -48,6 +63,9 @@ function doPost(e) {
       safeCellText(name),
       safeCellText(email),
       attendance,
+      guest.type,
+      guest.type === "Ceremony + Reception" && accepted ? "Allocated (13 guest seats max; couple occupies 2 venue places)" : (guest.type === "Ceremony + Reception" ? "Declined" : "Not applicable"),
+      accepted ? "Accepted" : "Declined",
       safeCellText(notes),
       accepted ? "Pending manual Google Photos invite" : "Not eligible",
       accepted ? "Pending" : "Not required"
@@ -64,10 +82,10 @@ function doPost(e) {
             "\n\nNext step: confirm the guest's Google Account and manually add it to the restricted Google Photos album. The album link is intentionally not included in this email.",
           name: "Marc & Angel Wedding RSVP"
         });
-        sheet.getRange(row, 7).setValue("Sent to owner");
+        sheet.getRange(row, 10).setValue("Sent to owner");
       } catch (mailError) {
         console.error("Notification email failed: " + String(mailError));
-        sheet.getRange(row, 7).setValue("Failed — check Apps Script logs");
+        sheet.getRange(row, 10).setValue("Failed — check Apps Script logs");
       }
     }
     return jsonResponse({ ok: true });
@@ -75,6 +93,33 @@ function doPost(e) {
     console.error(error);
     return jsonResponse({ ok: false, error: String(error.message || error) });
   }
+}
+
+function normalizeGuestName(value) {
+  return String(value == null ? "" : value)
+    .normalize("NFD").replace(/[\\u0300-\\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9 ]/g, " ")
+    .replace(/\\s+/g, " ").trim();
+}
+
+function findApprovedGuest(inputName) {
+  const input = normalizeGuestName(inputName);
+  if (!input) return null;
+  const all = [
+    { names: CEREMONY_GUESTS, type: "Ceremony + Reception" },
+    { names: RECEPTION_GUESTS, type: "Reception only" }
+  ];
+  for (let i = 0; i < all.length; i++) {
+    for (let j = 0; j < all[i].names.length; j++) {
+      const approved = normalizeGuestName(all[i].names[j]);
+      const approvedFirst = approved.split(" ")[0];
+      const inputFirst = input.split(" ")[0];
+      if (input === approved || inputFirst === approvedFirst) {
+        return { name: all[i].names[j], type: all[i].type };
+      }
+    }
+  }
+  return null;
 }
 
 function cleanText(value, maxLength) {
