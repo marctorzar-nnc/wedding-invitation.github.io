@@ -404,3 +404,7 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
     padding:0 7px 5px!important;
   }
 }
+
+/* Lower script-style caption beneath the portraits */
+.hero-photos .photo-caption{bottom:-78px!important;right:8%!important}
+@media(max-width:650px){.hero-photos .photo-caption{bottom:-68px!important;right:4%!important}}
