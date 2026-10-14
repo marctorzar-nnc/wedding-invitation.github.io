@@ -354,3 +354,34 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
   .attire-swatches i{flex-basis:34px!important;width:34px!important;height:34px!important}
   .attire-note{border-radius:18px!important;line-height:1.5}
 }
+
+
+/* Keep the hero captions below the portrait cards instead of underneath them */
+.hero-photos{min-height:560px!important;margin-bottom:28px}
+.hero-photos .art-caption{
+  z-index:5!important;
+  bottom:-12px!important;
+  left:8%!important;
+  right:8%!important;
+  justify-content:center!important;
+  flex-wrap:wrap;
+  text-align:center;
+  padding:7px 12px;
+  background:rgba(248,243,233,.94);
+  border-radius:999px;
+  box-sizing:border-box;
+}
+.hero-photos .photo-caption{
+  z-index:5!important;
+  bottom:-58px!important;
+  right:5%!important;
+  padding:0 4px;
+  white-space:nowrap;
+  background:rgba(248,243,233,.92);
+  border-radius:8px;
+}
+@media(max-width:650px){
+  .hero-photos{min-height:440px!important;margin-bottom:45px!important}
+  .hero-photos .art-caption{bottom:-18px!important;left:2%!important;right:2%!important;font-size:11px!important;gap:8px!important}
+  .hero-photos .photo-caption{bottom:-50px!important;right:3%!important;font-size:27px!important}
+}
