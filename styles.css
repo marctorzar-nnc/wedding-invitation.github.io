@@ -385,3 +385,22 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
   .hero-photos .art-caption{bottom:-18px!important;left:2%!important;right:2%!important;font-size:11px!important;gap:8px!important}
   .hero-photos .photo-caption{bottom:-50px!important;right:3%!important;font-size:27px!important}
 }
+
+
+/* Prevent the decorative couple names from clipping at the right edge */
+.hero-photos .photo-caption{
+  right:8%!important;
+  max-width:calc(100% - 16px);
+  padding:0 8px 4px!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  letter-spacing:-.015em;
+}
+@media(max-width:650px){
+  .hero-photos .photo-caption{
+    right:4%!important;
+    max-width:calc(100% - 8px)!important;
+    font-size:clamp(23px,7vw,27px)!important;
+    padding:0 7px 5px!important;
+  }
+}
