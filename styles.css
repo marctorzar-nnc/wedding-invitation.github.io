@@ -743,3 +743,48 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 @media(max-width:650px){
   .story-section:before{background-position:calc(50% + 28px) center!important}
 }
+
+
+/* Final hero caption placement: move names to the open left side of the portraits, never over the images */
+.hero-photos{position:relative!important}
+.hero-photos .photo-caption{
+  top:23%!important;
+  left:-19%!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:max-content!important;
+  max-width:42%!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  z-index:8!important;
+  padding:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  font-size:clamp(22px,2.5vw,34px)!important;
+  line-height:1.05!important;
+  text-align:left!important;
+  transform:none!important;
+}
+.hero-photos .photo-caption span{display:inline-block!important;margin:0 .08em!important}
+.rsvp-deco{display:none!important}
+.rsvp-monogram-art{display:none!important}
+/* Swatch sequence: ivory, champagne, beige, taupe, brown. Same palette on both attire cards. */
+.attire-swatches i:nth-child(1){background:#f8efdf!important}
+.attire-swatches i:nth-child(2){background:#ead8bb!important}
+.attire-swatches i:nth-child(3){background:#d1b895!important}
+.attire-swatches i:nth-child(4){background:#b8a28a!important}
+.attire-swatches i:nth-child(5){background:#87684e!important}
+@media(max-width:650px){
+  .hero-photos .photo-caption{
+    top:22%!important;
+    left:-18%!important;
+    right:auto!important;
+    bottom:auto!important;
+    max-width:34%!important;
+    font-size:clamp(18px,4.7vw,24px)!important;
+    line-height:1.1!important;
+    white-space:normal!important;
+    overflow-wrap:normal!important;
+    text-align:center!important;
+  }
+}
