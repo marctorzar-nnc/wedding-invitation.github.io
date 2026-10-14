@@ -731,3 +731,15 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
     opacity:.34!important;
   }
 }
+
+
+/* Nudge the story background toward the quoted passage */
+.story-section:before{
+  background-position:calc(50% + 150px) center!important;
+}
+@media(max-width:1100px){
+  .story-section:before{background-position:calc(50% + 90px) center!important}
+}
+@media(max-width:650px){
+  .story-section:before{background-position:calc(50% + 28px) center!important}
+}
