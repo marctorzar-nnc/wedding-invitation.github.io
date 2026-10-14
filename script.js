@@ -14,7 +14,7 @@ const WEDDING = {
   venue: "One Heart Wedding Events Management and Services",
   address: "87 Maginoo Street, Barangay Central, Quezon City, Metro Manila, Philippines",
   reception: "To Be Announced",
-  hashtag: "#OurDayOnThe28th"
+  hashtag: "#MarcMyWordsItsAngel"
 };
 
 // Paste the deployed Google Apps Script Web App URL here (must end in /exec).
