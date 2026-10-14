@@ -274,3 +274,24 @@ document.addEventListener("DOMContentLoaded", function () {
     sections.forEach(function (section) { sectionObserver.observe(section); });
   }
 });
+
+
+/* Interactive envelope: reveal the existing invitation after the flap opens. */
+document.addEventListener("DOMContentLoaded", function () {
+  const gate = document.getElementById("invitation-gate");
+  const openButton = document.getElementById("open-invitation");
+  if (!gate || !openButton) return;
+  openButton.addEventListener("click", function () {
+    if (gate.classList.contains("is-open")) return;
+    gate.classList.add("is-open");
+    openButton.disabled = true;
+    openButton.textContent = "Opening with love…";
+    window.setTimeout(function () {
+      gate.classList.add("is-leaving");
+      window.setTimeout(function () {
+        gate.remove();
+        document.getElementById("home")?.setAttribute("tabindex", "-1");
+      }, 800);
+    }, 1050);
+  });
+});
