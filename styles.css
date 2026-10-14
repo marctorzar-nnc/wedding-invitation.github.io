@@ -887,3 +887,14 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
  .shared-attire-palette .attire-swatches i{width:32px!important;height:32px!important;flex-basis:32px!important}
  .rsvp-rings{margin-bottom:16px}
 }
+
+
+/* Use the existing transparent wedding artwork beneath the RSVP invitation copy. */
+.rsvp-rings-image{
+  display:block;width:clamp(120px,18vw,190px);height:auto;max-height:145px;
+  object-fit:contain;object-position:center;margin:24px 0 0;
+  mix-blend-mode:multiply;
+}
+@media(max-width:650px){
+  .rsvp-rings-image{width:150px;max-height:120px;margin:22px auto 0}
+}
