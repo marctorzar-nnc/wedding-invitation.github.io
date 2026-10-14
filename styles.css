@@ -217,3 +217,140 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 /* Use separate uploaded model assets; show each full figure without crop or zoom */
 .attire-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important;align-items:stretch}.attire-card{display:flex!important;flex-direction:column!important;min-width:0;overflow:hidden}.attire-models-image{width:100%;height:clamp(250px,27vw,340px)!important;min-height:0!important;margin:0!important;padding:12px!important;box-sizing:border-box;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;background:#f7f0e4;border-radius:14px 14px 0 0}.attire-models-image img,.attire-men-image img,.attire-women-image img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;transform:none!important;transform-origin:center!important;clip-path:none!important;margin:0!important;flex:0 1 auto!important}.attire-copy{width:100%;box-sizing:border-box;padding:22px 24px 24px!important}.attire-copy p{max-width:none}
 @media(max-width:700px){.attire-grid{grid-template-columns:minmax(0,1fr)!important;gap:18px!important}.attire-models-image{height:clamp(240px,68vw,330px)!important;padding:10px!important}.attire-copy{padding:20px 20px 22px!important}}
+
+
+/* Wedding attire guide: split editorial cards inspired by the neutral reference */
+.attire-section{
+  width:min(calc(100% - 40px),1440px)!important;
+  max-width:1440px!important;
+  margin:56px auto 0!important;
+  padding:clamp(24px,3vw,46px)!important;
+  box-sizing:border-box;
+  overflow:visible!important;
+}
+.attire-heading{
+  max-width:820px!important;
+  margin:0 auto 30px!important;
+  text-align:center!important;
+}
+.attire-heading .eyebrow{justify-content:center}
+.attire-heading h3{margin:10px 0 12px}
+.attire-heading>p:last-child{max-width:760px;margin-left:auto!important;margin-right:auto!important}
+.attire-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:20px!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0 auto!important;
+}
+.attire-card{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;
+  grid-template-rows:1fr!important;
+  align-items:stretch!important;
+  border:1px solid #dfd0bc!important;
+  border-radius:22px!important;
+  overflow:hidden!important;
+  background:#fbf5eb!important;
+  box-shadow:none!important;
+  min-width:0!important;
+}
+.attire-models-image{
+  grid-column:1!important;
+  grid-row:1!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:380px!important;
+  margin:0!important;
+  padding:12px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  background:linear-gradient(145deg,#f4e8d7 0%,#f9f0e3 100%)!important;
+}
+.attire-models-image img,
+.attire-men-image img,
+.attire-women-image img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:520px!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  transform:none!important;
+  transform-origin:center!important;
+  clip-path:none!important;
+  margin:0!important;
+  flex:0 1 auto!important;
+}
+.attire-copy{
+  grid-column:2!important;
+  grid-row:1!important;
+  align-self:center!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:clamp(18px,1.7vw,30px)!important;
+}
+.attire-kicker{
+  display:block;
+  font-size:.68rem!important;
+  letter-spacing:.11em!important;
+  line-height:1.5;
+  color:#81715f!important;
+}
+.attire-copy h4{font-size:clamp(1.55rem,2vw,2.35rem)!important;line-height:1.12!important;margin:14px 0 16px!important}
+.attire-copy h4:after{content:"";display:block;width:44px;height:1px;background:#9a8268;margin-top:18px}
+.attire-copy p{font-size:.92rem!important;line-height:1.62!important;color:#6c5c4d!important}
+.attire-swatches{display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;margin-top:24px!important}
+.attire-swatches i{
+  flex:0 0 38px!important;
+  width:38px!important;height:38px!important;
+  border-radius:50%!important;
+  margin:0!important;
+  border:1px solid rgba(110,86,62,.18)!important;
+}
+.attire-swatches i:nth-child(1){background:#f8efdf!important}
+.attire-swatches i:nth-child(2){background:#ead8bb!important}
+.attire-swatches i:nth-child(3){background:#d1b895!important}
+.attire-swatches i:nth-child(4){background:#b8a28a!important}
+.attire-swatches i:nth-child(5){background:#87684e!important}
+.attire-swatches span{display:block!important;flex-basis:100%!important;margin-top:2px!important;font-size:.74rem!important;letter-spacing:.025em;color:#8a7865!important}
+.attire-note{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:14px!important;
+  min-height:72px;
+  padding:16px 24px!important;
+  border:1px solid #dfd0bc!important;
+  border-radius:999px!important;
+  background:#f6ecde!important;
+  text-align:center!important;
+  color:#6d5948!important;
+  font-family:Georgia,serif!important;
+  font-style:italic!important;
+  font-size:clamp(.9rem,1.3vw,1.15rem)!important;
+}
+.attire-note span{font-style:normal!important;color:#a08462!important}
+@media(max-width:1000px){
+  .attire-section{width:calc(100% - 28px)!important;padding:24px 16px!important}
+  .attire-grid{grid-template-columns:minmax(0,1fr)!important;max-width:760px!important}
+  .attire-card{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  .attire-models-image{min-height:350px!important}
+}
+@media(max-width:560px){
+  .attire-section{margin-top:38px!important;padding:22px 12px!important}
+  .attire-heading{margin-bottom:22px!important}
+  .attire-card{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto!important}
+  .attire-models-image{grid-column:1!important;grid-row:1!important;height:clamp(250px,75vw,340px)!important;min-height:0!important;padding:10px!important}
+  .attire-copy{grid-column:1!important;grid-row:2!important;padding:22px 22px 26px!important}
+  .attire-copy h4{font-size:2rem!important}
+  .attire-swatches i{flex-basis:34px!important;width:34px!important;height:34px!important}
+  .attire-note{border-radius:18px!important;line-height:1.5}
+}
