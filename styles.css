@@ -671,3 +671,63 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
   }
   .rsvp-monogram-art{width:145px!important}
 }
+
+
+/* Layout corrections requested: horizontal hero note, proportional story art, upper-right Day for Love art */
+.hero-side-note{
+  writing-mode:horizontal-tb!important;
+  text-orientation:mixed!important;
+  transform:none!important;
+  position:absolute!important;
+  top:24px!important;
+  right:5%!important;
+  left:auto!important;
+  bottom:auto!important;
+  width:auto!important;
+  height:auto!important;
+  white-space:nowrap!important;
+  letter-spacing:.16em!important;
+  font-size:.62rem!important;
+  text-align:right!important;
+}
+.story-section:before{
+  inset:0!important;
+  background-image:url("assets/Details-background.jpg")!important;
+  background-repeat:no-repeat!important;
+  background-position:center center!important;
+  background-size:contain!important;
+  opacity:.28!important;
+}
+.details-section:after{
+  top:7%!important;
+  bottom:auto!important;
+  right:3%!important;
+  width:min(38%,460px)!important;
+  height:34%!important;
+  background-image:url("assets/Day-for-love.jpg")!important;
+  background-repeat:no-repeat!important;
+  background-position:right top!important;
+  background-size:contain!important;
+  opacity:.52!important;
+  mix-blend-mode:multiply!important;
+}
+@media(max-width:650px){
+  .hero-side-note{
+    top:12px!important;
+    right:4%!important;
+    font-size:.52rem!important;
+    letter-spacing:.11em!important;
+  }
+  .story-section:before{
+    background-position:center center!important;
+    background-size:contain!important;
+    opacity:.2!important;
+  }
+  .details-section:after{
+    top:5%!important;
+    right:1%!important;
+    width:58%!important;
+    height:25%!important;
+    opacity:.34!important;
+  }
+}
