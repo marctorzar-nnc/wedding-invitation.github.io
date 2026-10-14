@@ -585,3 +585,89 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
   }
   .rsvp-monogram-art{width:145px;max-height:100px}
 }
+
+
+/* Final artwork pass: use supplied templates and remove the temporary hand-drawn decorations */
+.hero:before{
+  background-image:url("assets/1st-border-transparent.png")!important;
+  background-size:min(100%,760px) auto!important;
+  opacity:.42!important;
+  mix-blend-mode:multiply;
+}
+.story-section:before{
+  inset:-42px 0 0!important;
+  background-image:url("assets/Details-background.jpg")!important;
+  background-repeat:no-repeat!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  opacity:.32!important;
+}
+.story-section:after{display:none!important}
+.details-section{isolation:isolate;overflow:hidden}
+.details-section:after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  pointer-events:none;
+  right:3%;
+  bottom:0;
+  width:min(38%,460px);
+  height:44%;
+  background-image:url("assets/Day-for-love.jpg");
+  background-repeat:no-repeat;
+  background-position:right bottom;
+  background-size:contain;
+  opacity:.52;
+  mix-blend-mode:multiply;
+}
+.details-section>.section-index,.details-heading,.event-card,.attire-section,.details-footnote{position:relative;z-index:1}
+.rsvp-section:before,.rsvp-section:after{
+  top:4%!important;
+  bottom:4%!important;
+  width:clamp(74px,9vw,124px)!important;
+  background-image:url("assets/RSVP-sideborder-transparent-vertical.png")!important;
+  background-repeat:no-repeat!important;
+  background-position:center center!important;
+  background-size:auto 100%!important;
+  opacity:.62!important;
+  mix-blend-mode:normal!important;
+}
+.rsvp-section:before{left:0!important}
+.rsvp-section:after{right:0!important;transform:none!important;opacity:.62!important}
+.rsvp-monogram-art{
+  width:clamp(130px,18vw,190px)!important;
+  max-height:none!important;
+  mix-blend-mode:multiply!important;
+  opacity:1!important;
+  background:transparent!important;
+}
+@media(max-width:650px){
+  .hero:before{
+    top:5px!important;
+    left:2%!important;
+    right:2%!important;
+    height:65px!important;
+    background-size:100% auto!important;
+    opacity:.34!important;
+  }
+  .story-section:before{
+    inset:-25px 0 0!important;
+    background-position:center center!important;
+    background-size:cover!important;
+    opacity:.23!important;
+  }
+  .details-section:after{
+    right:0;
+    width:58%;
+    height:27%;
+    opacity:.25;
+  }
+  .rsvp-section:before,.rsvp-section:after{
+    top:8%!important;
+    bottom:8%!important;
+    width:38px!important;
+    background-size:auto 100%!important;
+    opacity:.38!important;
+  }
+  .rsvp-monogram-art{width:145px!important}
+}
