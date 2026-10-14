@@ -279,13 +279,12 @@ document.addEventListener("DOMContentLoaded", function () {
 /* Interactive envelope: reveal the existing invitation after the flap opens. */
 document.addEventListener("DOMContentLoaded", function () {
   const gate = document.getElementById("invitation-gate");
-  const openButton = document.getElementById("open-invitation");
-  if (!gate || !openButton) return;
-  openButton.addEventListener("click", function () {
+  const sealButton = document.getElementById("open-invitation");
+  if (!gate || !sealButton) return;
+  sealButton.addEventListener("click", function () {
     if (gate.classList.contains("is-open")) return;
     gate.classList.add("is-open");
-    openButton.disabled = true;
-    openButton.textContent = "Opening with love…";
+    sealButton.disabled = true;
     window.setTimeout(function () {
       gate.classList.add("is-leaving");
       window.setTimeout(function () {
