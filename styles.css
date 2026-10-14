@@ -836,3 +836,27 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 .gate-hint{margin:15px 0 0;font-size:8px;opacity:.8}
 @media(max-width:650px){.invitation-gate{padding:20px 18px 26px}.gate-kicker{margin-bottom:18px;font-size:8px}.envelope-scene{width:min(88vw,370px);height:clamp(190px,57vw,245px)}.envelope{height:70%}.gate-message{font-size:18px;margin:18px 0 16px}.gate-open-button{min-height:46px}}
 @media(prefers-reduced-motion:reduce){.invitation-gate,.envelope-flap,.envelope-letter,.envelope-seal{transition:none!important}}
+
+
+/* Envelope polish: let the letter clear the pocket instead of clipping behind it. */
+.envelope-letter{z-index:2}
+.envelope-seal{
+  appearance:none;-webkit-appearance:none;padding:0;margin:0;cursor:pointer;
+  font-family:var(--serif);line-height:1;touch-action:manipulation;
+}
+.envelope-seal:hover{filter:brightness(1.06);box-shadow:0 5px 13px rgba(78,54,28,.22);transform:translate(-50%,-50%) scale(1.06)}
+.envelope-seal:focus-visible{outline:2px solid #725a3c;outline-offset:6px}
+.invitation-gate.is-open .envelope-flap{z-index:1}
+.invitation-gate.is-open .envelope-letter{z-index:6;transform:translateY(-72%)}
+.invitation-gate.is-open .envelope-front{z-index:3}
+.invitation-gate.is-open .envelope-seal{pointer-events:none}
+.gate-hint{max-width:280px;text-align:center;line-height:1.7}
+@media(max-width:650px){
+ .invitation-gate{gap:0}
+ .envelope-scene{margin-bottom:4px}
+ .invitation-gate.is-open .envelope-letter{transform:translateY(-68%)}
+ .envelope-seal{width:50px;height:50px}
+}
+@media(prefers-reduced-motion:reduce){
+ .invitation-gate.is-open .envelope-letter{transform:translateY(-50%)}
+}
