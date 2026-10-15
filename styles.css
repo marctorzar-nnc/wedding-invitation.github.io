@@ -898,3 +898,7 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 @media(max-width:650px){
   .rsvp-rings-image{width:150px;max-height:120px;margin:22px auto 0}
 }
+
+
+/* Keep the reception capacity reminder visually separate from the address. */
+.event-row .reception-capacity-note{margin-top:14px}
