@@ -3,19 +3,26 @@
  * Update these values when the date, venue, and names are confirmed.
  * Wedding date: October 28, 2026.
  */
+
 const WEDDING = {
   names: "Marc & Angel",
   day: 28,
   month: "October",
   year: "2026",
-  // Set as YYYY-MM-DD when confirmed, for example 2027-02-28.
   isoDate: "2026-10-28",
   time: "2:00 PM",
+
+  // Ceremony
   venue: "One Heart Wedding Events Management and Services",
-  address: "87 Maginoo Street, Barangay Central, Quezon City, Metro Manila, Philippines",
-  reception: "To Be Announced",
+  address: "137 Matatag St, Diliman, Quezon City, 1100 Metro Manila",
+
+  // Reception
+  reception: "Hot Off the Press",
+  receptionAddress: "163 Maginhawa Street, UP Village, Diliman, Quezon City, Metro Manila 1101",
+
   hashtag: "#MarcMyWordsItsAngel"
 };
+
 
 // Paste the deployed Google Apps Script Web App URL here (must end in /exec).
 // Keep blank until the Apps Script is deployed; the form will explain what's missing.
