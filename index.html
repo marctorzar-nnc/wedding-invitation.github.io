@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=31">
-<script src="script.js?v=12" defer></script>
+<script src="script.js?v=13" defer></script>
 </head>
 <body>
 <div class="invitation-gate" id="invitation-gate" role="dialog" aria-modal="true" aria-label="Open wedding invitation">
@@ -60,7 +60,7 @@
 <div class="event-card reveal"><div class="event-date"><span class="date-month" id="event-month">MONTH</span><strong>28</strong><span class="date-year" id="event-year">YEAR</span><span class="date-flower" aria-hidden="true">✳</span></div>
 <div class="event-info"><div class="event-row"><span class="event-icon" aria-hidden="true">◷</span><div><span class="event-label">CEREMONY</span><strong id="event-time">Time to be announced</strong><p>Please arrive a little early.</p></div></div>
 <div class="event-row"><span class="event-icon" aria-hidden="true">⌖</span><div><span class="event-label">LOCATION</span><strong id="event-venue">To Be Announced</strong><p id="event-address">Quezon City, Philippines</p></div></div>
-<div class="event-row"><span class="event-icon" aria-hidden="true">♡</span><div><span class="event-label">RECEPTION</span><strong id="event-reception">To Be Announced</strong><p>Reception location to be announced.</p></div></div>
+<div class="event-row"><span class="event-icon" aria-hidden="true">♡</span><div><span class="event-label">RECEPTION</span><strong id="event-reception">To Be Announced</strong><p id="event-reception-address">163 Maginhawa Street, UP Village, Diliman, Quezon City, Metro Manila 1101</p><p>Reception capacity is limited to 25 guests. Please follow the invitation sent to you for your assigned venue.</p></div></div>
 <div class="event-actions"><a class="primary-button" id="map-link" href="https://maps.google.com/?q=Quezon+City+Philippines" target="_blank" rel="noopener noreferrer">Open map <span aria-hidden="true">↗</span></a><button class="secondary-button" id="calendar-button" type="button">Add to calendar <span aria-hidden="true">＋</span></button></div>
 </div></div>
 <section class="attire-section reveal" aria-labelledby="attire-title">
@@ -89,7 +89,7 @@
 <label for="guest-email">Email address <span class="optional">(optional)</span></label><input id="guest-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
 <fieldset><legend>Will you be attending? <span>*</span></legend><label class="radio-card"><input type="radio" name="attendance" value="Joyfully accepts" required><span>Joyfully accepts</span></label><label class="radio-card"><input type="radio" name="attendance" value="Regretfully declines"><span>Regretfully declines</span></label></fieldset>
 <div class="guest-policy-note" role="note"><span class="policy-note-heading">A gentle note about our celebration</span><p>As this is an intimate civil wedding with limited seating, we’re only able to accommodate the guest named on this invitation. We kindly ask that you attend without a plus-one. Thank you so much for understanding and respecting our arrangements.</p></div>
-<button class="primary-button submit-button" type="submit">Send RSVP <span aria-hidden="true">↗</span></button><p class="form-note">Your response helps us plan our day. Please submit one RSVP per guest.</p><div class="form-message" id="form-message" role="status" aria-live="polite" hidden></div>
+<button class="primary-button submit-button" type="submit">Send RSVP <span aria-hidden="true">↗</span></button><p class="form-note">Your response helps us plan our day. Please submit one RSVP per guest. Responses are reviewed manually; acceptance does not change the venue stated on your invitation.</p><div class="form-message" id="form-message" role="status" aria-live="polite" hidden></div>
 </form></div>
 <footer class="site-footer"><a class="brand footer-brand monogram" href="#home">M &amp; A</a><p>Thank you for being part of our story.</p><span class="footer-hashtag" id="event-hashtag">#MarcMyWordsItsAngel</span></footer>
 </section>
