@@ -8,19 +8,6 @@ const RESPONSE_SHEET_NAME = "RSVP Responses";
 const OWNER_EMAIL = "danietorzar00@gmail.com";
 const HEADERS = ["Timestamp", "Guest Name", "Email", "Attendance", "Dietary Needs / Note", "Private Album Invite Status", "Owner Notification Status", "Invitation Type", "Ceremony Seat", "Reception Status"];
 
-// Only the couple's approved guest list is eligible to submit an RSVP.
-// Match normalized full names or a unique first name, since the couple confirmed
-// there are no duplicate first names in their manually prepared list.
-const CEREMONY_GUESTS = [
-  "Melanie Ann", "Randy Soria", "Estrella Soria", "Marlene Torzar",
-  "Danilo Torzar", "Matt Torzar", "Vergie Formento", "Benigno Formento",
-  "Benjamin Formento", "Antonette Formento", "Ephrem Formento", "Rodelyn", "Ryan"
-];
-const RECEPTION_GUESTS = [
-  "Rommel Soria", "Marilyn Soria", "Jing Torzar", "Myla Torzar",
-  "Jersey Torzar", "Jessie Torzar", "Paula Formento", "Ruby", "Yesha"
-];
-
 function doGet() {
   return ContentService.createTextOutput("Wedding RSVP endpoint is running.").setMimeType(ContentService.MimeType.TEXT);
 }
@@ -36,11 +23,11 @@ function doPost(e) {
     const website = cleanText(data.website, 200);
     if (website) return jsonResponse({ ok: true });
     if (!name) throw new Error("Guest name is required.");
-    const guest = findApprovedGuest(name);
-    if (!guest) throw new Error("We couldn't match that name to the invitation list. Please use the name on your invitation or contact Marc and Angel.");
     if (["Joyfully accepts", "Regretfully declines"].indexOf(attendance) === -1) throw new Error("Invalid attendance response.");
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Invalid email address.");
 
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     let sheet = spreadsheet.getSheetByName(RESPONSE_SHEET_NAME);
     if (!sheet) sheet = spreadsheet.insertSheet(RESPONSE_SHEET_NAME);
@@ -57,19 +44,27 @@ function doPost(e) {
     }
 
     const accepted = attendance === "Joyfully accepts";
-    const row = sheet.getLastRow() + 1;
-    sheet.appendRow([
-      new Date(),
-      safeCellText(name),
-      safeCellText(email),
-      attendance,
-      safeCellText(notes),
-      accepted ? "Pending manual Google Photos invite" : "Not eligible",
+    // Count distinct accepted names before recording another acceptance.
+    // The script lock prevents simultaneous submissions exceeding the cap.
+    const lastRow = sheet.getLastRow();
+    const rows = lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, HEADERS.length).getValues() : [];
+    const normalizedName = normalizeGuestName(name);
+    const existingIndex = rows.findIndex(function(r) { return normalizeGuestName(r[1]) === normalizedName; });
+    const acceptedNames = new Set(rows.filter(function(r) { return r[3] === "Joyfully accepts"; }).map(function(r) { return normalizeGuestName(r[1]); }));
+    if (accepted && !acceptedNames.has(normalizedName) && acceptedNames.size >= 25) {
+      return jsonResponse({ ok: false, error: "The reception guest limit has been reached. Please contact Marc and Angel directly." });
+    }
+    const row = existingIndex >= 0 ? existingIndex + 2 : sheet.getLastRow() + 1;
+    const rowValues = [
+      new Date(), safeCellText(name), safeCellText(email), attendance, safeCellText(notes),
+      accepted ? "Pending manual review" : "Not eligible",
       accepted ? "Pending" : "Not required",
-      guest.type,
-      guest.type === "Ceremony + Reception" && accepted ? "Eligible (13 guest seats max; couple occupies 2 venue places)" : (guest.type === "Ceremony + Reception" ? "Declined" : "Not applicable"),
-      accepted ? "Accepted" : "Declined"
-    ]);
+      "Manual review — follow the invitation sent by Marc and Angel",
+      accepted ? "Manual allocation — maximum 13 ceremony guests" : "Declined",
+      accepted ? "Accepted — counts toward 25 reception guests" : "Declined"
+    ];
+    if (existingIndex >= 0) sheet.getRange(row, 1, 1, rowValues.length).setValues([rowValues]);
+    else sheet.appendRow(rowValues);
 
     if (accepted) {
       try {
@@ -92,6 +87,8 @@ function doPost(e) {
   } catch (error) {
     console.error(error);
     return jsonResponse({ ok: false, error: String(error.message || error) });
+  } finally {
+    try { LockService.getScriptLock().releaseLock(); } catch (ignored) {}
   }
 }
 
@@ -102,24 +99,9 @@ function normalizeGuestName(value) {
     .replace(/\\s+/g, " ").trim();
 }
 
-function findApprovedGuest(inputName) {
-  const input = normalizeGuestName(inputName);
-  if (!input) return null;
-  const all = [
-    { names: CEREMONY_GUESTS, type: "Ceremony + Reception" },
-    { names: RECEPTION_GUESTS, type: "Reception only" }
-  ];
-  for (let i = 0; i < all.length; i++) {
-    for (let j = 0; j < all[i].names.length; j++) {
-      const approved = normalizeGuestName(all[i].names[j]);
-      const approvedFirst = approved.split(" ")[0];
-      const inputFirst = input.split(" ")[0];
-      if (input === approved || inputFirst === approvedFirst) {
-        return { name: all[i].names[j], type: all[i].type };
-      }
-    }
-  }
-  return null;
+function normalizeGuestName(value) {
+  return String(value == null ? "" : value).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
 }
 
 function cleanText(value, maxLength) {
