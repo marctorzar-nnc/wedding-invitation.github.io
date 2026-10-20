@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formMessage.classList.remove("is-error", "is-accept", "is-decline");
         if (payload.attendance === "Joyfully accepts") {
           formMessage.classList.add("is-accept");
-          formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">✓</span><div class="acceptance-confirmation"><strong>Thank you for your RSVP!</strong><p>Your response has been submitted for review. We’ll manage ceremony seating separately (maximum 13 guests) and keep the reception within its 25-guest limit. Please follow the venue details on the invitation sent to you.</p></div>';
+          formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">✓</span><div class="acceptance-confirmation"><strong>Thank you for your RSVP!</strong><p>Your response has been recorded. Please note that the ceremony is reserved for immediate family and our four wedding sponsors (ninong and ninang). All other invited guests should proceed directly to the reception at Hot Off the Press. Reception attendance is limited to 25 invited guests; please do not bring a plus-one.</p></div>';
         } else {
           formMessage.classList.add("is-decline");
           formMessage.innerHTML = '<span class="confirmation-icon" aria-hidden="true">♥</span><div><strong>Thank you for letting us know.</strong><p>We’re sorry you won’t be joining us in person, but we’re grateful you took a moment to respond. You’ll be in our hearts on our special day.</p></div>';
