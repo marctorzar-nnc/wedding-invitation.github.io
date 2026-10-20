@@ -907,3 +907,7 @@ body{background:var(--ivory);color:var(--ink)}.ambient-one{background:#d9c5b0}.a
 /* Gentle spacing and readable bullets for the RSVP guest policy. */
 .guest-policy-list{margin:8px 0 12px;padding-left:19px;color:var(--muted);font-size:11px;line-height:1.75}
 .guest-policy-list li{padding-left:3px;margin:0 0 5px}
+
+
+/* Make the reception venue easy to spot in the event details. */
+.event-row .reception-venue-highlight{display:inline-block;color:var(--ink);background:var(--sage-light);padding:5px 9px;margin:3px 0 2px;border-left:3px solid var(--sage);border-radius:2px}
